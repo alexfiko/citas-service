@@ -60,7 +60,7 @@ management:
 # Configuración de Swagger
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html
+    path: /appointments/swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
     display-request-duration: true
