@@ -34,13 +34,22 @@ public class CitaService {
     }
 
     public CitaDTO crearCita(CitaDTO citaDTO) {
+        // Si viene pacienteId directamente del frontend, usarlo
+        if (citaDTO.getPacienteId() != null) {
+            // El paciente ya existe, solo crear la cita
+            Cita cita = CitaMapper.toEntity(citaDTO);
+            cita.setId(UUID.randomUUID().toString());
+            return CitaMapper.toDTO(citaRepository.save(cita));
+        }
+        
+        // Si viene un objeto paciente completo, crearlo primero
         PacienteDTO pacienteDTO = citaDTO.getPaciente();
-        Paciente paciente = null;
         if (pacienteDTO != null) {
             PacienteDTO pacienteCreado = pacienteClient.crearPaciente(pacienteDTO);
             citaDTO.setPacienteId(pacienteCreado.getId());
             citaDTO.setPacienteNombre(pacienteCreado.getNombre() + " " + pacienteCreado.getApellido());
         }
+        
         Cita cita = CitaMapper.toEntity(citaDTO);
         cita.setId(UUID.randomUUID().toString());
         return CitaMapper.toDTO(citaRepository.save(cita));
